@@ -1,0 +1,17 @@
+# Mysql Live
+API_SECRET=testing #Used when creating a JWT. It can be anything
+DB_HOST=localhost
+DB_DRIVER=mysql 
+DB_USER=root
+DB_PASSWORD=root
+DB_NAME=restful_api_go
+DB_PORT=8889 #Default mysql port
+
+# Mysql Test
+TestApiSecret=testing
+TestDbHost=localhost
+TestDbDriver=mysql
+TestDbUser=root
+TestDbPassword=root
+TestDbName=restful_api_go_test
+TestDbPort=8889
