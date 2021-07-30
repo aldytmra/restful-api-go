@@ -35,36 +35,36 @@ func TestCreateUser(t *testing.T) {
 			email:        "pet@gmail.com",
 			errorMessage: "",
 		},
-		// {
-		// 	inputJSON:    `{"nickname":"Frank", "email": "pet@gmail.com", "password": "password"}`,
-		// 	statusCode:   500,
-		// 	errorMessage: "Email Already Taken",
-		// },
-		// {
-		// 	inputJSON:    `{"nickname":"Pet", "email": "grand@gmail.com", "password": "password"}`,
-		// 	statusCode:   500,
-		// 	errorMessage: "Nickname Already Taken",
-		// },
-		// {
-		// 	inputJSON:    `{"nickname":"Kan", "email": "kangmail.com", "password": "password"}`,
-		// 	statusCode:   422,
-		// 	errorMessage: "Invalid Email",
-		// },
-		// {
-		// 	inputJSON:    `{"nickname": "", "email": "kan@gmail.com", "password": "password"}`,
-		// 	statusCode:   422,
-		// 	errorMessage: "Required Nickname",
-		// },
-		// {
-		// 	inputJSON:    `{"nickname": "Kan", "email": "", "password": "password"}`,
-		// 	statusCode:   422,
-		// 	errorMessage: "Required Email",
-		// },
-		// {
-		// 	inputJSON:    `{"nickname": "Kan", "email": "kan@gmail.com", "password": ""}`,
-		// 	statusCode:   422,
-		// 	errorMessage: "Required Password",
-		// },
+		{
+			inputJSON:    `{"nickname":"Frank", "email": "pet@gmail.com", "password": "password"}`,
+			statusCode:   500,
+			errorMessage: "Email Already Taken",
+		},
+		{
+			inputJSON:    `{"nickname":"Pet", "email": "grand@gmail.com", "password": "password"}`,
+			statusCode:   500,
+			errorMessage: "Nickname Already Taken",
+		},
+		{
+			inputJSON:    `{"nickname":"Kan", "email": "kangmail.com", "password": "password"}`,
+			statusCode:   422,
+			errorMessage: "Invalid Email",
+		},
+		{
+			inputJSON:    `{"nickname": "", "email": "kan@gmail.com", "password": "password"}`,
+			statusCode:   422,
+			errorMessage: "Required Nickname",
+		},
+		{
+			inputJSON:    `{"nickname": "Kan", "email": "", "password": "password"}`,
+			statusCode:   422,
+			errorMessage: "Required Email",
+		},
+		{
+			inputJSON:    `{"nickname": "Kan", "email": "kan@gmail.com", "password": ""}`,
+			statusCode:   422,
+			errorMessage: "Required Password",
+		},
 	}
 
 	for _, v := range samples {
@@ -246,22 +246,22 @@ func TestUpdateUser(t *testing.T) {
 			tokenGiven:   "This is incorrect token",
 			errorMessage: "Unauthorized",
 		},
-		// {
-		// 	// Remember "kenny@gmail.com" belongs to user 2
-		// 	id:           strconv.Itoa(int(AuthID)),
-		// 	updateJSON:   `{"nickname":"Frank", "email": "kenny@gmail.com", "password": "password"}`,
-		// 	statusCode:   500,
-		// 	tokenGiven:   tokenString,
-		// 	errorMessage: "Email Already Taken",
-		// },
-		// {
-		// 	// Remember "Kenny Morris" belongs to user 2
-		// 	id:           strconv.Itoa(int(AuthID)),
-		// 	updateJSON:   `{"nickname":"Kenny Morris", "email": "grand@gmail.com", "password": "password"}`,
-		// 	statusCode:   500,
-		// 	tokenGiven:   tokenString,
-		// 	errorMessage: "Nickname Already Taken",
-		// },
+		{
+			// Remember "kenny@gmail.com" belongs to user 2
+			id:           strconv.Itoa(int(AuthID)),
+			updateJSON:   `{"nickname":"Frank", "email": "lazuardy@gmail.com", "password": "password"}`,
+			statusCode:   500,
+			tokenGiven:   tokenString,
+			errorMessage: "Email Already Taken",
+		},
+		{
+			// Remember "Kenny Morris" belongs to user 2
+			id:           strconv.Itoa(int(AuthID)),
+			updateJSON:   `{"nickname":"Lauzardyk", "email": "grand@gmail.com", "password": "password"}`,
+			statusCode:   500,
+			tokenGiven:   tokenString,
+			errorMessage: "Nickname Already Taken",
+		},
 		{
 			id:           strconv.Itoa(int(AuthID)),
 			updateJSON:   `{"nickname":"Kan", "email": "kangmail.com", "password": "password"}`,

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -51,6 +52,7 @@ func (server *Server) SignIn(email, password string) (string, error) {
 		return "", err
 	}
 	err = models.VerifyPassword(user.Password, password)
+	fmt.Println("Verify Pass : ", err)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
