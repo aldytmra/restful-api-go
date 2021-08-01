@@ -201,7 +201,7 @@ func TestUpdateUser(t *testing.T) {
 	if err != nil {
 		log.Fatalf("cannot login: %v\n", err)
 	}
-	tokenString := fmt.Sprintf("Bearer %v", token)
+	tokenString := fmt.Sprintf("Bearer %v", token["access_token"])
 
 	samples := []struct {
 		id             string
@@ -357,7 +357,7 @@ func TestDeleteUser(t *testing.T) {
 	if err != nil {
 		log.Fatalf("cannot login: %v\n", err)
 	}
-	tokenString := fmt.Sprintf("Bearer %v", token)
+	tokenString := fmt.Sprintf("Bearer %v", token["access_token"])
 
 	userSample := []struct {
 		id           string

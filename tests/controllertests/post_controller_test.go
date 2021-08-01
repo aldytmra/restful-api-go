@@ -29,7 +29,7 @@ func TestCreatePost(t *testing.T) {
 	if err != nil {
 		log.Fatalf("cannot login: %v\n", err)
 	}
-	tokenString := fmt.Sprintf("Bearer %v", token)
+	tokenString := fmt.Sprintf("Bearer %v", token["access_token"])
 
 	samples := []struct {
 		inputJSON    string
@@ -233,7 +233,7 @@ func TestUpdatePost(t *testing.T) {
 	if err != nil {
 		log.Fatalf("cannot login: %v\n", err)
 	}
-	tokenString := fmt.Sprintf("Bearer %v", token)
+	tokenString := fmt.Sprintf("Bearer %v", token["access_token"])
 
 	// Get only the first post
 	for _, post := range posts {
@@ -382,7 +382,7 @@ func TestDeletePost(t *testing.T) {
 	if err != nil {
 		log.Fatalf("cannot login: %v\n", err)
 	}
-	tokenString := fmt.Sprintf("Bearer %v", token)
+	tokenString := fmt.Sprintf("Bearer %v", token["access_token"])
 
 	// Get only the second post
 	for _, post := range posts {
