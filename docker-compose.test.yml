@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  app_test:
+    container_name: full_app_test
+    build:
+      context: .
+      dockerfile: ./Dockerfile.test
+    volumes:
+      - api_test:/app/src/app/
+    depends_on:
+      #- postgres_test
+      - mysql_test
+    networks:
+      - fullstack_test
+    links:
+      - redis
+    
+  mysql_test:
+    image: mysql/mysql-server:latest
+    container_name: full_db_mysql_test
+    ports: 
+        - 3306:3306
+    environment: 
+        - MYSQL_DATABASE=${TEST_DB_NAME}
+        - MYSQL_USER=${TEST_DB_USER}
+        - MYSQL_PASSWORD=${TEST_DB_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${TEST_DB_PASSWORD}
+        - DATABASE_HOST=${TEST_DB_HOST} 
+    networks:
+        - fullstack_test
+
+  redis:
+    image: "bitnami/redis:latest"
+    container_name: redis_container_test
+    environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+        - "6379:6379"
+    restart: always
+    networks:
+        - fullstack_test
+  
+volumes:
+  api_test:
+  database_mysql_test:
+
+networks:
+  fullstack_test:
+    driver: bridge
