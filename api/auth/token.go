@@ -12,6 +12,7 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis/v7"
+	"github.com/joho/godotenv"
 	"github.com/twinj/uuid"
 )
 
@@ -28,17 +29,36 @@ type TokenDetails struct {
 
 func init() {
 	//Initializing redis
-	dsn := os.Getenv("REDIS_DSN")
+	var err error
+	var dsn string
+	if strings.HasSuffix(os.Args[0], ".test") {
+		fmt.Println("run under go test")
+		err = godotenv.Load(os.ExpandEnv("../../.env"))
+		dsn = "redis:" + os.Getenv("REDIS_PORT")
+	} else {
+		fmt.Println("normal run")
+		err = godotenv.Load()
+		dsn = os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT")
+	}
+
+	if err != nil {
+		log.Fatalf("Error token getting env, not comming through %v", err)
+	} else {
+		fmt.Println("We are getting the env values")
+	}
+
+	fmt.Println(dsn)
 	if len(dsn) == 0 {
-		dsn = "redis:6379"
+		dsn = "fullstack-redis:6379"
 	}
 	client = redis.NewClient(&redis.Options{
-		Addr: "redis:6379",
-		//redis port
+		Addr:     dsn,
+		Password: "",
+		DB:       0,
 	})
-	_, err := client.Ping().Result()
-	if err != nil {
-		panic(err)
+	_, errs := client.Ping().Result()
+	if errs != nil {
+		panic(errs)
 	}
 }
 
@@ -58,6 +78,7 @@ func CreateToken(user_id uint32) (*TokenDetails, error) {
 	atClaims["user_id"] = user_id
 	atClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	fmt.Println("ACCESS_SECRET", os.Getenv("ACCESS_SECRET"))
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
 	if err != nil {
 		return nil, err
@@ -69,6 +90,7 @@ func CreateToken(user_id uint32) (*TokenDetails, error) {
 	rtClaims["user_id"] = user_id
 	rtClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
+	fmt.Println("REFRESH_SECRET", os.Getenv("REFRESH_SECRET"))
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
 	if err != nil {
 		return nil, err
@@ -83,12 +105,11 @@ func CreateAuth(userid uint32, td *TokenDetails) error {
 
 	errAccess := client.Set(td.AccessUuid, strconv.Itoa(int(userid)), at.Sub(now)).Err()
 	if errAccess != nil {
-		fmt.Println("errAccess", errAccess)
+
 		return errAccess
 	}
 	errRefresh := client.Set(td.RefreshUuid, strconv.Itoa(int(userid)), rt.Sub(now)).Err()
 	if errRefresh != nil {
-		fmt.Println("errRefresh", errRefresh)
 		return errRefresh
 	}
 	return nil
@@ -108,6 +129,7 @@ func TokenValid(r *http.Request) error {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
+		fmt.Println("ACCESS_SECRET", os.Getenv("ACCESS_SECRET"))
 		return []byte(os.Getenv("ACCESS_SECRET")), nil
 	})
 	if err != nil {

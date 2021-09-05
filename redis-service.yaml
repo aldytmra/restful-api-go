@@ -1,0 +1,13 @@
+apiVersion: v1                           # API version
+kind: Service                            # Type of kubernetes resource 
+metadata:
+  name: fullstack-redis                  # Name of the resource
+  labels:                                # Labels that will be applied to the resource
+    app: fullstack-redis
+spec:
+  type: NodePort
+  ports:
+    - port: 6379
+  selector:                              # Selects any Pod with labels `app=fullstack-redis,tier=redis`
+    app: fullstack-redis
+    tier: redis 

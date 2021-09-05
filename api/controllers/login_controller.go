@@ -110,6 +110,7 @@ func (server *Server) Refresh(w http.ResponseWriter, r *http.Request) {
 		saveErr := auth.CreateAuth(uint32(userId), ts)
 		if saveErr != nil {
 			responses.JSON(w, http.StatusForbidden, saveErr.Error())
+			fmt.Println("saveErr", saveErr.Error())
 			return
 		}
 		http.SetCookie(w, &http.Cookie{
@@ -148,7 +149,7 @@ func (server *Server) SignIn(email, password string) (map[string]interface{}, er
 		return mapEmpty, err
 	}
 	err = models.VerifyPassword(user.Password, password)
-	fmt.Println("Verify Pass : ", err)
+	fmt.Println("Verify Pass 1.0.10: ", err)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return mapEmpty, err
 	}
